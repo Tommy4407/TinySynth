@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="L2gYwH" name="TinySynth" projectType="audioplug" displaySplashScreen="1"
+              jucerFormatVersion="1" pluginFormats="buildStandalone,buildVST3"
+              pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
+              version="0.1.0">
+  <MAINGROUP id="FHG4G1" name="TinySynth">
+    <GROUP id="{FB4ACD7A-B29B-DB8F-9A32-1CB8CD2A965A}" name="Source">
+      <GROUP id="{87535F7D-8816-98B5-2E4B-9914F446DC7C}" name="GUI">
+        <FILE id="KVzsu3" name="ParametersComponent.cpp" compile="1" resource="0"
+              file="Source/GUI/ParametersComponent.cpp"/>
+        <FILE id="Hue5c9" name="ParametersComponent.h" compile="0" resource="0"
+              file="Source/GUI/ParametersComponent.h"/>
+        <FILE id="oD77d8" name="ScopeComponent.cpp" compile="1" resource="0"
+              file="Source/GUI/ScopeComponent.cpp"/>
+        <FILE id="vG1FNV" name="ScopeComponent.h" compile="0" resource="0"
+              file="Source/GUI/ScopeComponent.h"/>
+      </GROUP>
+      <GROUP id="{A879CDDC-6EE1-E4DA-FBCB-FBE9D43CA5FF}" name="DSP">
+        <FILE id="i8Sa2x" name="AmpEnvelope.cpp" compile="1" resource="0" file="Source/DSP/AmpEnvelope.cpp"/>
+        <FILE id="UTHxmh" name="AmpEnvelope.h" compile="0" resource="0" file="Source/DSP/AmpEnvelope.h"/>
+        <FILE id="xEp245" name="TinySynthParameters.cpp" compile="1" resource="0"
+              file="Source/DSP/TinySynthParameters.cpp"/>
+        <FILE id="fHE1kY" name="TinySynthParameters.h" compile="0" resource="0"
+              file="Source/DSP/TinySynthParameters.h"/>
+        <FILE id="Dgnvpu" name="TinySynthSound.cpp" compile="1" resource="0"
+              file="Source/DSP/TinySynthSound.cpp"/>
+        <FILE id="Y8VnUm" name="TinySynthSound.h" compile="0" resource="0"
+              file="Source/DSP/TinySynthSound.h"/>
+        <FILE id="PdnJdc" name="TinySynthVoice.cpp" compile="1" resource="0"
+              file="Source/DSP/TinySynthVoice.cpp"/>
+        <FILE id="Bv6qzm" name="TinySynthVoice.h" compile="0" resource="0"
+              file="Source/DSP/TinySynthVoice.h"/>
+        <FILE id="ws3yuL" name="Waveforms.cpp" compile="1" resource="0" file="Source/DSP/Waveforms.cpp"/>
+        <FILE id="Omfo6R" name="Waveforms.h" compile="0" resource="0" file="Source/DSP/Waveforms.h"/>
+      </GROUP>
+      <FILE id="GEsFAJ" name="PluginProcessor.cpp" compile="1" resource="0"
+            file="Source/PluginProcessor.cpp"/>
+      <FILE id="nYuGvl" name="PluginProcessor.h" compile="0" resource="0"
+            file="Source/PluginProcessor.h"/>
+      <FILE id="w09woe" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="zoCCwM" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"
+               JUCE_ASIO="1"/>
+  <EXPORTFORMATS>
+    <VS2019 targetFolder="Builds/VisualStudio2019">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="TinySynth" headerPath="D:\programing\sdks\asiosdk_2.3.3_2019-06-14\common"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="TinySynth" headerPath="D:\programing\sdks\asiosdk_2.3.3_2019-06-14\common"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../../JUCE/modules"/>
+      </MODULEPATHS>
+    </VS2019>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+</JUCERPROJECT>
