@@ -30,6 +30,14 @@ private:
 
     virtual void timerCallback() override;
 
+    void plot(const float* data
+        , size_t numSamples
+        , Graphics& g
+        , Rectangle<float> rect
+        , float scaler = float(1)
+        , float offset = float(0));
+
+
     OscillatorParameters* _oscParamsPtr;
 
     Slider sineWaveLevelSlider;

@@ -10,6 +10,8 @@
 
 #include "ParametersComponent.h"
 
+#include "../DSP/Waveforms.h"
+
 namespace {
     const Colour PANEL_COLOUR = Colour(36, 36, 196);
     const float PANEL_NAME_FONT_SIZE = 24.0f;
@@ -129,6 +131,61 @@ void OscillatorParametersComponent::paint(Graphics& g)
 
         g.drawText(text, textArea, Justification::centred, true);
     }
+
+    // local waveform visual
+    {
+        Rectangle<int> bounds = getLocalBounds();
+        bounds.removeFromTop(PANEL_NAME_HEIGHT);
+        bounds.removeFromTop(bounds.getHeight() * 0.5);
+        g.setColour(Colours::darkblue);
+        g.fillRect(bounds);
+        bounds.reduce(bounds.getWidth() * 0.05f, bounds.getHeight() * 0.1f);
+        g.setColour(Colours::black);
+        g.fillRect(bounds);
+
+        Rectangle<int> drawArea = bounds;
+        float drawX = (float)drawArea.getX();
+        float drawY = (float)drawArea.getY();
+        float drawH = (float)drawArea.getHeight();
+        float drawW = (float)drawArea.getWidth();
+        Rectangle<float> scopeRect = Rectangle<float>{ drawX, drawY, drawW, drawH };
+
+        // calc
+        const float TWO_PI = MathConstants<float>::twoPi;
+        Waveforms waveForms;
+        const size_t sampleNum = 512;
+        float angleDelta = TWO_PI / sampleNum;
+        float* sampleData = new float[sampleNum];
+
+        float currentAngle = 0.0f;
+        
+        for (int cnt = 0; cnt < sampleNum; cnt++) {
+            float currentSample = 0.0f;
+            currentSample += waveForms.sine(currentAngle) * _oscParamsPtr->SineWaveLevel->get();
+            currentSample += waveForms.saw(currentAngle) * _oscParamsPtr->SawWaveLevel->get();
+            currentSample += waveForms.triangle(currentAngle) * _oscParamsPtr->TriWaveLevel->get();
+            currentSample += waveForms.square(currentAngle) * _oscParamsPtr->SquareWaveLevel->get();
+            currentSample += waveForms.noise() * _oscParamsPtr->NoiseLevel->get();
+
+            float rate = _oscParamsPtr->SineWaveLevel->get()
+                + _oscParamsPtr->SawWaveLevel->get()
+                + _oscParamsPtr->TriWaveLevel->get()
+                + _oscParamsPtr->SquareWaveLevel->get()
+                + _oscParamsPtr->NoiseLevel->get();
+            if (rate > 1.0f) {
+                currentSample /= rate;
+            }
+
+            sampleData[cnt] = currentSample;
+            currentAngle += angleDelta;
+        }
+
+        g.setColour(Colours::yellow);
+
+        plot(sampleData, sampleNum, g, scopeRect, float(0.4), scopeRect.getHeight() / 2);
+
+
+    }
 }
 
 void OscillatorParametersComponent::resized()
@@ -140,8 +197,10 @@ void OscillatorParametersComponent::resized()
     Rectangle<int> bounds = getLocalBounds();
     bounds.removeFromTop(PANEL_NAME_HEIGHT);
 
+    Rectangle<int> upperArea = bounds.removeFromTop(bounds.getHeight() * 0.5);
+
     {
-        Rectangle<int> area = bounds.removeFromLeft(getWidth() * divide);
+        Rectangle<int> area = upperArea.removeFromLeft(getWidth() * divide);
 
         sineWaveLevelLabel.setBounds(area.removeFromTop(labelHeight).reduced(LOCAL_MARGIN));
 
@@ -149,25 +208,25 @@ void OscillatorParametersComponent::resized()
     }
 
     {
-        Rectangle<int> area = bounds.removeFromLeft(getWidth() * divide);
+        Rectangle<int> area = upperArea.removeFromLeft(getWidth() * divide);
         sawWaveLevelLabel.setBounds(area.removeFromTop(labelHeight).reduced(LOCAL_MARGIN));
         sawWaveLevelSlider.setBounds(area.reduced(LOCAL_MARGIN));
     }
 
     {
-        Rectangle<int> area = bounds.removeFromLeft(getWidth() * divide);
+        Rectangle<int> area = upperArea.removeFromLeft(getWidth() * divide);
         triWaveLevelLabel.setBounds(area.removeFromTop(labelHeight).reduced(LOCAL_MARGIN));
         triWaveLevelSlider.setBounds(area.reduced(LOCAL_MARGIN));
     }
 
     {
-        Rectangle<int> area = bounds.removeFromLeft(getWidth() * divide);
+        Rectangle<int> area = upperArea.removeFromLeft(getWidth() * divide);
         squareWaveLevelLabel.setBounds(area.removeFromTop(labelHeight).reduced(LOCAL_MARGIN));
         squareWaveLevelSlider.setBounds(area.reduced(LOCAL_MARGIN));
     }
 
     {
-        Rectangle<int> area = bounds.removeFromLeft(getWidth() * divide);
+        Rectangle<int> area = upperArea.removeFromLeft(getWidth() * divide);
         noiseLevelLabel.setBounds(area.removeFromTop(labelHeight).reduced(LOCAL_MARGIN));
         noiseLevelSlider.setBounds(area.reduced(LOCAL_MARGIN));
     }
@@ -180,6 +239,7 @@ void OscillatorParametersComponent::timerCallback()
     triWaveLevelSlider.setValue(_oscParamsPtr->TriWaveLevel->get(), dontSendNotification);
     squareWaveLevelSlider.setValue(_oscParamsPtr->SquareWaveLevel->get(), dontSendNotification);
     noiseLevelSlider.setValue(_oscParamsPtr->NoiseLevel->get(), dontSendNotification);
+    repaint();
 }
 
 void OscillatorParametersComponent::sliderValueChanged(Slider* slider)
@@ -205,6 +265,33 @@ void OscillatorParametersComponent::sliderValueChanged(Slider* slider)
         *_oscParamsPtr->NoiseLevel = (float)noiseLevelSlider.getValue();
     }
 }
+
+void OscillatorParametersComponent::plot(const float* data
+        , size_t numSamples
+        , Graphics& g
+        , Rectangle<float> rect
+        , float scaler
+        , float offset)
+{
+        auto w = rect.getWidth();
+        auto h = rect.getHeight();
+        auto right = rect.getRight();
+        auto alignedCentre = rect.getBottom() - offset;
+        auto gain = h * scaler;
+
+
+        for (size_t i = 1; i < numSamples; ++i)
+        {
+            const float x1 = jmap(float(i - 1), float(0), float(numSamples - 1), float(right - w), float(right));
+            const float y1 = alignedCentre - gain * data[i - 1];
+            const float x2 = jmap(float(i), float(0), float(numSamples - 1), float(right - w), float(right));
+            const float y2 = alignedCentre - gain * data[i];
+            const float t = 1.0f;
+            g.drawLine(x1, y1, x2, y2, t);
+        }
+}
+
+
 
 AmpEnvelopeParametersComponent::AmpEnvelopeParametersComponent(AmpEnvelopeParameters * ampEnvParams)
     :_ampEnvParamsPtr(ampEnvParams)
