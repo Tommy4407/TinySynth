@@ -3,7 +3,7 @@
 <JUCERPROJECT id="L2gYwH" name="TinySynth" projectType="audioplug" displaySplashScreen="1"
               jucerFormatVersion="1" pluginFormats="buildStandalone,buildVST3"
               pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
-              version="0.1.0">
+              version="0.1.0" companyName="TMC">
   <MAINGROUP id="FHG4G1" name="TinySynth">
     <GROUP id="{FB4ACD7A-B29B-DB8F-9A32-1CB8CD2A965A}" name="Source">
       <GROUP id="{87535F7D-8816-98B5-2E4B-9914F446DC7C}" name="GUI">

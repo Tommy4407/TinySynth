@@ -48,7 +48,7 @@
 namespace ProjectInfo
 {
     const char* const  projectName    = "TinySynth";
-    const char* const  companyName    = "";
+    const char* const  companyName    = "TMC";
     const char* const  versionString  = "0.1.0";
     const int          versionNumber  = 0x100;
 }
